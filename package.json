@@ -18,7 +18,12 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm": "NODE_ENV=cli node ./node_modules/typeorm/cli.js -f src/ormconfig-cli.ts",
+    "typeorm:run": "yarn typeorm migration:run",
+    "typeorm:new": "yarn typeorm migration:create -n",
+    "typeorm:generate": "yarn typeorm migration:generate -n",
+    "typeorm:revert": "yarn typeorm migration:revert"
   },
   "dependencies": {
     "@nestjs/common": "^7.5.1",
