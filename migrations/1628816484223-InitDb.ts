@@ -7,7 +7,7 @@ export class InitDb1628816484223 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      'CREATE TABLE user_technologies (technology_id int NOT NULL, user_id vachar(36) NOT NULL)',
+      'CREATE TABLE user_technologies (technology_id int NOT NULL, user_id varchar(36) NOT NULL)',
     );
 
     await queryRunner.query(
@@ -19,11 +19,11 @@ export class InitDb1628816484223 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      'ALTER TABLE user_comments ADD CONSTRAINT FK_user_comments_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL UPDATE CASCADE',
+      'ALTER TABLE user_comments ADD CONSTRAINT FK_user_comments_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL ON UPDATE CASCADE',
     );
 
     await queryRunner.query(
-      'ALTER TABLE project_members ADD CONSTRAINT FK_project_members_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE UPDATE CASCADE',
+      'ALTER TABLE project_members ADD CONSTRAINT FK_project_members_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE',
     );
 
     await queryRunner.query(
@@ -36,6 +36,20 @@ export class InitDb1628816484223 implements MigrationInterface {
       'ALTER TABLE user_technologies DROP CONSTRAINT FK_user_technologies_user',
     );
 
-    await queryRunner.query('');
+    await queryRunner.query(
+      'ALTER TABLE project_members DROP CONSTRAINT FK_project_members_user',
+    );
+
+    await queryRunner.query(
+      'ALTER TABLE user_comments DROP CONSTRAINT FK_user_comments_user',
+    );
+
+    await queryRunner.query('DROP TABLE user_comments');
+
+    await queryRunner.query('DROP TABLE project_members');
+
+    await queryRunner.query('DROP TABLE user_technologies');
+
+    await queryRunner.query('DROP TABLE users');
   }
 }
