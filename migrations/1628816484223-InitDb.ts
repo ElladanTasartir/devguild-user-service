@@ -7,7 +7,7 @@ export class InitDb1628816484223 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      'CREATE TABLE user_technologies (technology_id int NOT NULL, user_id varchar(36) NOT NULL)',
+      'CREATE TABLE user_technologies (id int PRIMARY KEY NOT NULL, technology_id int NOT NULL, user_id varchar(36) NOT NULL)',
     );
 
     await queryRunner.query(
