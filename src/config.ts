@@ -26,6 +26,6 @@ export const postgres = {
   username: process.env.POSTGRES_USERNAME,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DATABASE,
-  synchronize: !!process.env.SYNC_DB || false,
-  logging: !!process.env.ORM_LOG_ENABLED || false,
+  synchronize: process.env.SYNC_DB === 'true' || false,
+  logging: process.env.ORM_LOG_ENABLED === 'true' || false,
 };
