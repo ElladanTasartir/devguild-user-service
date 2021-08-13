@@ -6,6 +6,6 @@ export class AppController {
   getHello(): Record<string, string> {
     return {
       status: 'Working!',
-    }
+    };
   }
 }
