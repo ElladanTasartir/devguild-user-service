@@ -1,9 +1,12 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Technology } from './user-technologies.entity';
 import { v4 as uuid } from 'uuid';
 
 @Entity({ name: 'users' })
@@ -11,10 +14,10 @@ export class User {
   @PrimaryColumn()
   id: string;
 
-  @PrimaryColumn()
+  @Column()
   username: string;
 
-  @PrimaryColumn()
+  @Column()
   email: string;
 
   @CreateDateColumn()
@@ -22,6 +25,9 @@ export class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => Technology, (tech) => tech.user)
+  technologies: Technology[];
 
   constructor() {
     if (!this.id) {
