@@ -3,15 +3,19 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class InitDb1628816484223 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      'CREATE TABLE users (id varchar(36) PRIMARY KEY NOT NULL, username varchar NOT NULL, email varchar NOT NULL, created_at timestamptz NOT NULL, updated_at timestamptz NOT NULL)',
+      'CREATE TABLE users (id varchar(36) PRIMARY KEY NOT NULL, username varchar NOT NULL, email varchar NOT NULL, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now())',
     );
 
     await queryRunner.query(
-      'CREATE TABLE user_technologies (id int PRIMARY KEY NOT NULL, technology_id int NOT NULL, user_id varchar(36) NOT NULL)',
+      'CREATE TABLE user_technologies (technology_id int NOT NULL, user_id varchar(36) NOT NULL)',
     );
 
     await queryRunner.query(
-      'CREATE TABLE project_members (id int PRIMARY KEY NOT NULL, user_id varchar(36) NOT NULL, project_id varchar(36) NOT NULL)',
+      'ALTER TABLE user_technologies ADD CONSTRAINT PK_user_technologies PRIMARY KEY (technology_id, user_id)',
+    );
+
+    await queryRunner.query(
+      'CREATE TABLE project_members (user_id varchar(36) NOT NULL, project_id varchar(36) NOT NULL)',
     );
 
     await queryRunner.query(
@@ -47,6 +51,10 @@ export class InitDb1628816484223 implements MigrationInterface {
     await queryRunner.query('DROP TABLE user_comments');
 
     await queryRunner.query('DROP TABLE project_members');
+
+    await queryRunner.query(
+      'ALTER TABLE user_comments DROP CONSTRAINT PK_user_technologies',
+    );
 
     await queryRunner.query('DROP TABLE user_technologies');
 
