@@ -11,7 +11,7 @@ export class InitDb1628816484223 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      'CREATE TABLE project_members (user_id varchar(36) NOT NULL, project_id varchar(36) NOT NULL)',
+      'CREATE TABLE project_members (id int PRIMARY KEY NOT NULL, user_id varchar(36) NOT NULL, project_id varchar(36) NOT NULL)',
     );
 
     await queryRunner.query(
