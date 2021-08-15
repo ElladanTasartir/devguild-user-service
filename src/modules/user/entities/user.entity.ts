@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Technology } from './user-technologies.entity';
 import { v4 as uuid } from 'uuid';
+import { ProjectMembers } from '../../project/entities/project-members.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -28,6 +29,9 @@ export class User {
 
   @OneToMany(() => Technology, (tech) => tech.user)
   technologies: Technology[];
+
+  @OneToMany(() => ProjectMembers, (project) => project.user)
+  projects: ProjectMembers[];
 
   constructor() {
     if (!this.id) {
