@@ -4,3 +4,4 @@ dist
 .env.development
 .env.local
 .env.cli
+*.log
