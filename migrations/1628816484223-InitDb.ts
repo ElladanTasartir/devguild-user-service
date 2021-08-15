@@ -19,6 +19,10 @@ export class InitDb1628816484223 implements MigrationInterface {
     );
 
     await queryRunner.query(
+      'ALTER TABLE project_members ADD CONSTRAINT PK_project_members PRIMARY KEY (user_id, project_id)',
+    );
+
+    await queryRunner.query(
       'CREATE TABLE user_comments (id varchar(36) PRIMARY KEY NOT NULL, user_id varchar(36), project_id varchar(36) NOT NULL, created_at timestamptz NOT NULL, updated_at timestamptz NOT NULL)',
     );
 
@@ -50,10 +54,14 @@ export class InitDb1628816484223 implements MigrationInterface {
 
     await queryRunner.query('DROP TABLE user_comments');
 
+    await queryRunner.query(
+      'ALTER TABLE project_members DROP CONSTRAINT PK_project_members',
+    );
+
     await queryRunner.query('DROP TABLE project_members');
 
     await queryRunner.query(
-      'ALTER TABLE user_comments DROP CONSTRAINT PK_user_technologies',
+      'ALTER TABLE user_technologies DROP CONSTRAINT PK_user_technologies',
     );
 
     await queryRunner.query('DROP TABLE user_technologies');
