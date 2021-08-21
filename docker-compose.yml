@@ -10,7 +10,7 @@ services:
     depends_on:
       - db
     ports:
-      - 3000:3000
+      - 7000:7000
     volumes:
       - .:/home/app:cached
       - ./package.json:/home/app/package.json:cached
@@ -21,7 +21,7 @@ services:
     image: postgres:9.4
     container_name: devguild-user-service-db
     ports:
-      - 5432:5432
+      - 5433:5432
     environment:
       - POSTGRES_USER=devguild
       - POSTGRES_PASSWORD=user-service
