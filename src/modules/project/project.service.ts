@@ -24,4 +24,13 @@ export class ProjectService {
 
     return project;
   }
+
+  async insertProjectMember(id: string, user_id: string): Promise<void> {
+    const projectMember = await this.projectRepository.create({
+      project_id: id,
+      user_id,
+    });
+
+    await this.projectRepository.save(projectMember);
+  }
 }

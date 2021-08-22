@@ -21,6 +21,9 @@ export class User {
   @Column()
   email: string;
 
+  @Column()
+  avatar_url: string;
+
   @CreateDateColumn()
   created_at: Date;
 

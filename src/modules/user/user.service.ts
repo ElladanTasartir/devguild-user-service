@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateUserDTO } from './dtos/create-user.dto';
 import { User } from './entities/user.entity';
 
@@ -25,6 +25,14 @@ export class UserService {
     }
 
     return user;
+  }
+
+  async getUsersByIds(ids: string[]): Promise<User[]> {
+    return this.userRepository.find({
+      where: {
+        id: In(ids),
+      },
+    });
   }
 
   async createNewUser(createUserDTO: CreateUserDTO): Promise<User> {
