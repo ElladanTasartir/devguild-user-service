@@ -21,7 +21,7 @@ export class TechnologiesService {
     });
   }
 
-  private findUserByTechnologyIdAndId(
+  private findUserByTechnologiesIdAndId(
     technologies: TechnologyDTO[],
     id: string,
   ): Promise<Technology[]> {
@@ -39,7 +39,7 @@ export class TechnologiesService {
   ) {
     const { technologies } = insertTechnologiesInUserDTO;
 
-    const userAlreadyHasTechnologies = await this.findUserByTechnologyIdAndId(
+    const userAlreadyHasTechnologies = await this.findUserByTechnologiesIdAndId(
       technologies,
       id,
     );
