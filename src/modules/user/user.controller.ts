@@ -12,10 +12,16 @@ import { User } from './entities/user.entity';
 import { GetUserDTO } from './dtos/get-user.dto';
 import { CreateUserDTO } from './dtos/create-user.dto';
 import { FindUsersByIdsDTO } from './dtos/find-users-by-ids.dto';
+import { InsertTechnologiesInUserDTO } from './dtos/insert-technologies-in-user.dto';
+import { TechnologiesService } from './technologies.service';
+import { Technology } from './entities/user-technologies.entity';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly technologiesService: TechnologiesService,
+  ) {}
 
   @Get(':id')
   getUser(@Param(ValidationPipe) { id }: GetUserDTO): Promise<User> {
@@ -35,5 +41,17 @@ export class UserController {
     @Body(ValidationPipe) createUserDTO: CreateUserDTO,
   ): Promise<User> {
     return this.userService.createNewUser(createUserDTO);
+  }
+
+  @Post(':id/techs')
+  insertTechnologiesInUser(
+    @Param(ValidationPipe) { id }: GetUserDTO,
+    @Body(ValidationPipe)
+    insertTechnologiesInUserDTO: InsertTechnologiesInUserDTO,
+  ): Promise<Technology[]> {
+    return this.technologiesService.insertTechnologiesInUser(
+      insertTechnologiesInUserDTO,
+      id,
+    );
   }
 }
