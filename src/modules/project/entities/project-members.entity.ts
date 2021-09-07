@@ -4,6 +4,7 @@ import { User } from '../../user/entities/user.entity';
 
 @Entity({ name: 'project_members' })
 export class ProjectMembers {
+  @Exclude()
   @PrimaryColumn()
   project_id: string;
 

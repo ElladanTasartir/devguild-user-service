@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProjectMembers } from './entities/project-members.entity';
@@ -26,6 +30,19 @@ export class ProjectService {
   }
 
   async insertProjectMember(id: string, user_id: string): Promise<void> {
+    const userFoundInProject = await this.projectRepository.findOne({
+      where: {
+        project_id: id,
+        user_id,
+      },
+    });
+
+    if (userFoundInProject) {
+      throw new BadRequestException(
+        `User "${user_id}" is already in project "${id}"`,
+      );
+    }
+
     const projectMember = await this.projectRepository.create({
       project_id: id,
       user_id,

@@ -1,10 +1,12 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Param,
   Post,
   Query,
+  UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -16,6 +18,7 @@ import { InsertTechnologiesInUserDTO } from './dtos/insert-technologies-in-user.
 import { TechnologiesService } from './technologies.service';
 import { Technology } from './entities/user-technologies.entity';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
 export class UserController {
   constructor(
