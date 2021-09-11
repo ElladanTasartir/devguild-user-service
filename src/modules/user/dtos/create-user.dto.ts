@@ -1,4 +1,12 @@
-import { IsEmail, IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import {
+  IsEmail,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsPositive,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 
 export class CreateUserDTO {
   @IsNotEmpty()
@@ -6,7 +14,12 @@ export class CreateUserDTO {
   username: string;
 
   @IsEmail()
+  @IsOptional()
   email: string;
+
+  @IsInt()
+  @IsPositive()
+  github_id: number;
 
   @IsUrl()
   avatar_url: string;

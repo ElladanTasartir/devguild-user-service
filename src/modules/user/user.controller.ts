@@ -17,6 +17,7 @@ import { FindUsersByIdsDTO } from './dtos/find-users-by-ids.dto';
 import { InsertTechnologiesInUserDTO } from './dtos/insert-technologies-in-user.dto';
 import { TechnologiesService } from './technologies.service';
 import { Technology } from './entities/user-technologies.entity';
+import { FindUserByGithubIdDTO } from './dtos/find-user-by-github-id.dto';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
@@ -37,6 +38,13 @@ export class UserController {
     findUsersByIdsDTO: FindUsersByIdsDTO,
   ): Promise<User[]> {
     return this.userService.getUsersByIds(findUsersByIdsDTO.ids);
+  }
+
+  @Get(':github_id/github')
+  getUserByGithubId(
+    @Param(ValidationPipe) findUserByGithubIdDTO: FindUserByGithubIdDTO,
+  ): Promise<User> {
+    return this.userService.getUserByGithubId(findUserByGithubIdDTO.github_id);
   }
 
   @Post()

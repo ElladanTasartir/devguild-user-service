@@ -24,6 +24,9 @@ export class User {
   @Column()
   avatar_url: string;
 
+  @Column()
+  github_id: number;
+
   @CreateDateColumn()
   created_at: Date;
 

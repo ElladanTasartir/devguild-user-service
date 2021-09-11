@@ -35,10 +35,19 @@ export class UserService {
     });
   }
 
+  getUserByGithubId(github_id: number): Promise<User> {
+    return this.userRepository.findOne({
+      where: {
+        github_id,
+      },
+    });
+  }
+
   async createNewUser(createUserDTO: CreateUserDTO): Promise<User> {
     const userAlreadyExists = await this.userRepository.findOne({
       where: {
         email: createUserDTO.email,
+        github_id: createUserDTO.github_id,
       },
     });
 
