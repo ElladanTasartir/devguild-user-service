@@ -11,6 +11,7 @@ const REQUIRED_ENV_VARS = [
   'POSTGRES_USERNAME',
   'POSTGRES_PASSWORD',
   'POSTGRES_DATABASE',
+  'MONGODB_URI',
 ];
 
 REQUIRED_ENV_VARS.forEach((envVar) => {
@@ -30,4 +31,8 @@ export const postgres = {
   database: process.env.POSTGRES_DATABASE,
   synchronize: process.env.SYNC_DB === 'true' || false,
   logging: process.env.ORM_LOG_ENABLED === 'true' || false,
+};
+
+export const mongodb = {
+  uri: `mongodb://${process.env.MONGODB_URI}`,
 };
