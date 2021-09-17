@@ -9,7 +9,6 @@ services:
       dockerfile: Dockerfile-dev
     depends_on:
       - db-user-service
-      - mongo-user-service
     ports:
       - 7000:7000
     volumes:
@@ -17,15 +16,6 @@ services:
       - ./package.json:/home/app/package.json:cached
     networks: 
       - devguild-user-service-network
-
-  mongo-user-service:
-    container_name: devguild-user-service-mongo
-    image: mongo:latest
-    ports:
-      - 27017:27017
-    environment: 
-      - MONGO_INITDB_ROOT_USERNAME=devguild-user-comments
-      - MONGO_INITDB_ROOT_PASSWORD=devguild-user-mongodb
 
   db-user-service:
     image: postgres:9.4
