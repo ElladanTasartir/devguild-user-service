@@ -9,8 +9,10 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { GetMembersDTO } from './dtos/get-members.dto';
+import { InsertCommentDTO } from './dtos/insert-comment.dto';
 import { InsertProjectMemberDTO } from './dtos/insert-project-member.dto';
 import { ProjectMembers } from './entities/project-members.entity';
+import { UsersComments } from './entities/users-comments.entity';
 import { ProjectService } from './project.service';
 
 @Controller('projects')
@@ -35,6 +37,19 @@ export class ProjectController {
     return this.projectService.insertProjectMember(
       getMembersDTO.id,
       insertProjectMemberDTO.user_id,
+    );
+  }
+
+  @Post(':id/comments')
+  insertComment(
+    @Param(ValidationPipe)
+    getMembersDTO: GetMembersDTO,
+    @Body(ValidationPipe)
+    insertCommentDTO: InsertCommentDTO,
+  ): Promise<UsersComments> {
+    return this.projectService.insertComment(
+      getMembersDTO.id,
+      insertCommentDTO,
     );
   }
 }
