@@ -32,7 +32,3 @@ export const postgres = {
   synchronize: process.env.SYNC_DB === 'true' || false,
   logging: process.env.ORM_LOG_ENABLED === 'true' || false,
 };
-
-export const mongodb = {
-  uri: `mongodb://${process.env.MONGODB_URI}`,
-};
