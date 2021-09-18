@@ -1,4 +1,4 @@
-import { User } from 'src/modules/user/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -10,8 +10,8 @@ import {
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
-@Entity({ name: 'users_comments' })
-export class UsersComments {
+@Entity({ name: 'user_comments' })
+export class UserComments {
   @PrimaryColumn()
   id: string;
 

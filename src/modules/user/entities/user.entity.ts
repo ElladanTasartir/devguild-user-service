@@ -9,7 +9,7 @@ import {
 import { Technology } from './user-technologies.entity';
 import { v4 as uuid } from 'uuid';
 import { ProjectMembers } from '../../project/entities/project-members.entity';
-import { UsersComments } from 'src/modules/project/entities/users-comments.entity';
+import { UserComments } from '../../project/entities/user-comments.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -34,8 +34,8 @@ export class User {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToMany(() => UsersComments, (usersComments) => usersComments.user)
-  comments: UsersComments[];
+  @OneToMany(() => UserComments, (usersComments) => usersComments.user)
+  comments: UserComments[];
 
   @OneToMany(() => Technology, (tech) => tech.user)
   technologies: Technology[];

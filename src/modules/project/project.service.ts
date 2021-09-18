@@ -9,7 +9,7 @@ import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { InsertCommentDTO } from './dtos/insert-comment.dto';
 import { ProjectMembers } from './entities/project-members.entity';
-import { UsersComments } from './entities/users-comments.entity';
+import { UserComments } from './entities/user-comments.entity';
 import { CommentsWithUsers } from './interfaces/comments-with-users.interface';
 
 @Injectable()
@@ -17,8 +17,8 @@ export class ProjectService {
   constructor(
     @InjectRepository(ProjectMembers)
     private readonly projectRepository: Repository<ProjectMembers>,
-    @InjectRepository(UsersComments)
-    private readonly commentsRepository: Repository<UsersComments>,
+    @InjectRepository(UserComments)
+    private readonly commentsRepository: Repository<UserComments>,
     private readonly userService: UserService,
   ) {}
 
@@ -38,6 +38,8 @@ export class ProjectService {
   }
 
   async insertProjectMember(id: string, user_id: string): Promise<void> {
+    await this.userService.getUser(user_id);
+
     const userFoundInProject = await this.projectRepository.findOne({
       where: {
         project_id: id,
@@ -51,7 +53,7 @@ export class ProjectService {
       );
     }
 
-    const projectMember = await this.projectRepository.create({
+    const projectMember = this.projectRepository.create({
       project_id: id,
       user_id,
     });
@@ -59,11 +61,13 @@ export class ProjectService {
     await this.projectRepository.save(projectMember);
   }
 
-  insertComment(
+  async insertComment(
     id: string,
     insertCommentDTO: InsertCommentDTO,
-  ): Promise<UsersComments> {
+  ): Promise<UserComments> {
     const { comment, user_id } = insertCommentDTO;
+
+    await this.userService.getUser(user_id);
 
     const createdComment = this.commentsRepository.create({
       comment,
@@ -89,7 +93,7 @@ export class ProjectService {
   }
 
   mapUsersToComments(
-    comments: UsersComments[],
+    comments: UserComments[],
     users: User[],
   ): CommentsWithUsers[] {
     return comments.map((comment) => {

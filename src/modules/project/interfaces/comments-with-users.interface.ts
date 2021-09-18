@@ -1,8 +1,8 @@
 import { User } from '../../user/entities/user.entity';
-import { UsersComments } from '../entities/users-comments.entity';
+import { UserComments } from '../entities/user-comments.entity';
 
 type StrippedUser = Pick<User, 'avatar_url' | 'username'>;
 
-export interface CommentsWithUsers extends UsersComments {
+export interface CommentsWithUsers extends UserComments {
   user_comment: StrippedUser;
 }

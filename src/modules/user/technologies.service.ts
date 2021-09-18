@@ -4,12 +4,14 @@ import { In, Repository } from 'typeorm';
 import { InsertTechnologiesInUserDTO } from './dtos/insert-technologies-in-user.dto';
 import { TechnologyDTO } from './dtos/technology-dto';
 import { Technology } from './entities/user-technologies.entity';
+import { UserService } from './user.service';
 
 @Injectable()
 export class TechnologiesService {
   constructor(
     @InjectRepository(Technology)
     private readonly technologyRepository: Repository<Technology>,
+    private readonly userService: UserService,
   ) {}
 
   getUsersByTechnology(id: number): Promise<Technology[]> {
@@ -38,6 +40,8 @@ export class TechnologiesService {
     id: string,
   ) {
     const { technologies } = insertTechnologiesInUserDTO;
+
+    await this.userService.getUser(id);
 
     const userAlreadyHasTechnologies = await this.findUserByTechnologiesIdAndId(
       technologies,
