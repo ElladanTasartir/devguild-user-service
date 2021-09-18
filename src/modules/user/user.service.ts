@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { CreateUserDTO } from './dtos/create-user.dto';
+import { UpdateUserDTO } from './dtos/update-user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -15,10 +16,14 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async getUser(id: string): Promise<User> {
-    const user = await this.userRepository.findOne(id, {
-      relations: ['technologies'],
-    });
+  async getUser(id: string, relations = true): Promise<User> {
+    const relationOptions = relations
+      ? {
+          relations: ['technologies'],
+        }
+      : {};
+
+    const user = await this.userRepository.findOne(id, relationOptions);
 
     if (!user) {
       throw new NotFoundException(`User with ID "${id}" not found`);
@@ -41,6 +46,16 @@ export class UserService {
         github_id,
       },
     });
+  }
+
+  async updateUser(id: string, updateUserDTO: UpdateUserDTO): Promise<User> {
+    const user = await this.getUser(id, false);
+
+    for (const key in updateUserDTO) {
+      user[key] = updateUserDTO[key];
+    }
+
+    return this.userRepository.save(user);
   }
 
   async createNewUser(createUserDTO: CreateUserDTO): Promise<User> {

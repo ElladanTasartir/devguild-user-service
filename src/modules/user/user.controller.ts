@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   UseInterceptors,
   ValidationPipe,
@@ -18,6 +19,7 @@ import { InsertTechnologiesInUserDTO } from './dtos/insert-technologies-in-user.
 import { TechnologiesService } from './technologies.service';
 import { Technology } from './entities/user-technologies.entity';
 import { FindUserByGithubIdDTO } from './dtos/find-user-by-github-id.dto';
+import { UpdateUserDTO } from './dtos/update-user.dto';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
@@ -52,6 +54,14 @@ export class UserController {
     @Body(ValidationPipe) createUserDTO: CreateUserDTO,
   ): Promise<User> {
     return this.userService.createNewUser(createUserDTO);
+  }
+
+  @Put(':id')
+  updateUser(
+    @Param(ValidationPipe) getUserDTO: GetUserDTO,
+    @Body(ValidationPipe) updateUserDTO: UpdateUserDTO,
+  ): Promise<User> {
+    return this.userService.updateUser(getUserDTO.id, updateUserDTO);
   }
 
   @Post(':id/techs')
