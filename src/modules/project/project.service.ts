@@ -38,7 +38,7 @@ export class ProjectService {
   }
 
   async insertProjectMember(id: string, user_id: string): Promise<void> {
-    await this.userService.getUser(user_id);
+    await this.userService.getUser(user_id, false);
 
     const userFoundInProject = await this.projectRepository.findOne({
       where: {
@@ -67,7 +67,7 @@ export class ProjectService {
   ): Promise<UserComments> {
     const { comment, user_id } = insertCommentDTO;
 
-    await this.userService.getUser(user_id);
+    await this.userService.getUser(user_id, false);
 
     const createdComment = this.commentsRepository.create({
       comment,
