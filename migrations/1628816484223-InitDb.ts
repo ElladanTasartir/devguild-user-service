@@ -23,7 +23,7 @@ export class InitDb1628816484223 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      'CREATE TABLE user_comments (id varchar(36) PRIMARY KEY NOT NULL, user_id varchar(36), project_id varchar(36) NOT NULL, created_at timestamptz NOT NULL, updated_at timestamptz NOT NULL)',
+      'CREATE TABLE user_comments (id varchar(36) PRIMARY KEY NOT NULL, user_id varchar(36), project_id varchar(36) NOT NULL, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now())',
     );
 
     await queryRunner.query(
