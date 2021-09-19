@@ -102,7 +102,10 @@ export class ProjectService {
       );
 
       if (!userWhoCommented) {
-        return;
+        return {
+          ...comment,
+          user_comment: null,
+        };
       }
 
       delete comment.user_id;
