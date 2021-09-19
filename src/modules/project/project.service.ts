@@ -108,8 +108,6 @@ export class ProjectService {
         };
       }
 
-      delete comment.user_id;
-
       return {
         ...comment,
         user_comment: {
