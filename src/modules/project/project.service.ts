@@ -5,6 +5,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { FetchProjectService } from '../fetch/fetch-project.service';
+import { Project } from '../fetch/interfaces/project.interface';
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { InsertCommentDTO } from './dtos/insert-comment.dto';
@@ -20,6 +22,7 @@ export class ProjectService {
     @InjectRepository(UserComments)
     private readonly commentsRepository: Repository<UserComments>,
     private readonly userService: UserService,
+    private readonly fetchProjectService: FetchProjectService,
   ) {}
 
   async getMembersFromProject(id: string): Promise<ProjectMembers[]> {
@@ -38,6 +41,8 @@ export class ProjectService {
   }
 
   async insertProjectMember(id: string, user_id: string): Promise<void> {
+    await this.getProjectById(id);
+
     await this.userService.getUser(user_id, false);
 
     const userFoundInProject = await this.projectRepository.findOne({
@@ -67,6 +72,8 @@ export class ProjectService {
   ): Promise<UserComments> {
     const { comment, user_id } = insertCommentDTO;
 
+    await this.getProjectById(id);
+
     await this.userService.getUser(user_id, false);
 
     const createdComment = this.commentsRepository.create({
@@ -79,6 +86,8 @@ export class ProjectService {
   }
 
   async getCommentsFromProject(id: string): Promise<CommentsWithUsers[]> {
+    await this.getProjectById(id);
+
     const commentsFromProject = await this.commentsRepository.find({
       project_id: id,
     });
@@ -92,7 +101,15 @@ export class ProjectService {
     return this.mapUsersToComments(commentsFromProject, users);
   }
 
-  mapUsersToComments(
+  private getProjectById(id: string): Promise<Project> | never {
+    try {
+      return this.fetchProjectService.findProjectById(id);
+    } catch (err) {
+      throw new NotFoundException(`Project with ID "${id}" was not found`);
+    }
+  }
+
+  private mapUsersToComments(
     comments: UserComments[],
     users: User[],
   ): CommentsWithUsers[] {

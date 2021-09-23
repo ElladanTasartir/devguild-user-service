@@ -11,6 +11,7 @@ const REQUIRED_ENV_VARS = [
   'POSTGRES_USERNAME',
   'POSTGRES_PASSWORD',
   'POSTGRES_DATABASE',
+  'DEVGUILD_PROJECT_SERVICE_URL',
 ];
 
 REQUIRED_ENV_VARS.forEach((envVar) => {
@@ -19,6 +20,8 @@ REQUIRED_ENV_VARS.forEach((envVar) => {
     throw new Error(`Required ENV VAR not set: ${envVar}`);
   }
 });
+
+export const projectServiceURL = `http://${process.env.DEVGUILD_PROJECT_SERVICE_URL}`;
 
 export const port = Number(process.env.PORT) || 7000;
 
