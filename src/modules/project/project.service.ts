@@ -101,9 +101,11 @@ export class ProjectService {
     return this.mapUsersToComments(commentsFromProject, users);
   }
 
-  private getProjectById(id: string): Promise<Project> | never {
+  private async getProjectById(id: string): Promise<Project | never> {
     try {
-      return this.fetchProjectService.findProjectById(id);
+      const projectExists = await this.fetchProjectService.findProjectById(id);
+
+      return projectExists;
     } catch (err) {
       throw new NotFoundException(`Project with ID "${id}" was not found`);
     }
