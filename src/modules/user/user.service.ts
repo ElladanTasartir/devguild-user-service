@@ -40,7 +40,7 @@ export class UserService {
       throw new NotFoundException(`User with ID "${id}" not found`);
     }
 
-    if (user.technologies.length) {
+    if (user.technologies?.length) {
       const technologies = await this.fetchTechService.findTechnologiesbyIds(
         user.technologies.map((tech) => tech.technology_id),
       );
