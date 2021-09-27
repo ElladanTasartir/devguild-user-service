@@ -1,22 +1,33 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
+import { FetchTechService } from '../fetch/fetch-tech.service';
 import { CreateUserDTO } from './dtos/create-user.dto';
 import { UpdateUserDTO } from './dtos/update-user.dto';
 import { User } from './entities/user.entity';
+import { UsersTechnologies } from './interfaces/technology.interface';
+import { UserWithTechnologies } from './interfaces/users-with-technologies.interface';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @Inject('TECHNOLOGIES_PROCESSOR')
+    private readonly technologProcessorClient: ClientProxy,
+    private readonly fetchTechService: FetchTechService,
   ) {}
 
-  async getUser(id: string, relations = true): Promise<User> {
+  async getUser(
+    id: string,
+    relations = true,
+  ): Promise<User | UserWithTechnologies> {
     const relationOptions = relations
       ? {
           relations: ['technologies'],
@@ -27,6 +38,14 @@ export class UserService {
 
     if (!user) {
       throw new NotFoundException(`User with ID "${id}" not found`);
+    }
+
+    if (user.technologies.length) {
+      const technologies = await this.fetchTechService.findTechnologiesbyIds(
+        user.technologies.map((tech) => tech.technology_id),
+      );
+
+      return this.mapTechnologiesToSingleUser(technologies, user);
     }
 
     return user;
@@ -59,10 +78,12 @@ export class UserService {
   }
 
   async createNewUser(createUserDTO: CreateUserDTO): Promise<User> {
+    const { github_id, email } = createUserDTO;
+
     const userAlreadyExists = await this.userRepository.findOne({
       where: {
-        email: createUserDTO.email,
-        github_id: createUserDTO.github_id,
+        email,
+        github_id,
       },
     });
 
@@ -72,6 +93,47 @@ export class UserService {
 
     const newUser = this.userRepository.create(createUserDTO);
 
-    return this.userRepository.save(newUser);
+    await this.userRepository.save(newUser);
+
+    this.technologProcessorClient.emit('process-technologies', {
+      id: newUser.id,
+      github_id,
+    });
+
+    return newUser;
+  }
+
+  mapTechnologiesToSingleUser(
+    technologies: UsersTechnologies[],
+    user: User,
+  ): UserWithTechnologies {
+    const userWithTechnologies = user.technologies.map((tech) =>
+      technologies.find((technology) => technology.id === tech.technology_id),
+    );
+
+    delete user.technologies;
+
+    return {
+      ...user,
+      users_technologies: userWithTechnologies,
+    };
+  }
+
+  mapTechnologiesToUsers(
+    technologies: UsersTechnologies[],
+    users: User[],
+  ): UserWithTechnologies[] {
+    return users.map((user) => {
+      const userWithTechnologies = user.technologies.map((tech) =>
+        technologies.find((technology) => technology.id === tech.technology_id),
+      );
+
+      delete user.technologies;
+
+      return {
+        ...user,
+        users_technologies: userWithTechnologies,
+      };
+    });
   }
 }

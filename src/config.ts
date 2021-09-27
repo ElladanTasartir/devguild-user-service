@@ -12,6 +12,9 @@ const REQUIRED_ENV_VARS = [
   'POSTGRES_PASSWORD',
   'POSTGRES_DATABASE',
   'DEVGUILD_PROJECT_SERVICE_URL',
+  'DEVGUILD_TECH_SERVICE_URL',
+  'RABBITMQ_HOST',
+  'TECHNOLOGIES_PROCESSOR_QUEUE',
 ];
 
 REQUIRED_ENV_VARS.forEach((envVar) => {
@@ -23,7 +26,14 @@ REQUIRED_ENV_VARS.forEach((envVar) => {
 
 export const projectServiceURL = `http://${process.env.DEVGUILD_PROJECT_SERVICE_URL}`;
 
+export const techServiceURL = `http://${process.env.DEVGUILD_TECH_SERVICE_URL}`;
+
 export const port = Number(process.env.PORT) || 7000;
+
+export const rabbitmq = {
+  connectionString: `amqp://${process.env.RABBITMQ_HOST}`,
+  technologiesProcessorQueue: process.env.TECHNOLOGIES_PROCESSOR_QUEUE,
+};
 
 export const postgres = {
   host: process.env.POSTGRES_HOST,
