@@ -67,6 +67,12 @@ export class UserService {
     });
   }
 
+  async processUser(id: string): Promise<void> {
+    const user = await this.getUser(id, false);
+
+    this.technologProcessorClient.emit('process-user', user);
+  }
+
   async updateUser(id: string, updateUserDTO: UpdateUserDTO): Promise<User> {
     const user = await this.getUser(id, false);
 

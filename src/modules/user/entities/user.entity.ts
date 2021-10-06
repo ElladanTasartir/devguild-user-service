@@ -20,6 +20,9 @@ export class User {
   username: string;
 
   @Column()
+  login: string;
+
+  @Column()
   email: string;
 
   @Column()
@@ -27,6 +30,18 @@ export class User {
 
   @Column()
   github_id: number;
+
+  @Column()
+  bio: string;
+
+  @Column()
+  followers: number;
+
+  @Column()
+  following: number;
+
+  @Column()
+  location: string;
 
   @CreateDateColumn()
   created_at: Date;

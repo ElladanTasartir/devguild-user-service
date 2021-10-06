@@ -1,5 +1,4 @@
 import {
-  IsEmail,
   IsInt,
   IsOptional,
   IsPositive,
@@ -10,16 +9,25 @@ import {
 export class UpdateUserDTO {
   @IsOptional()
   @IsString()
-  username?: string;
+  bio?: string;
 
-  @IsEmail()
   @IsOptional()
-  email?: string;
+  @IsString()
+  location?: string;
 
   @IsOptional()
   @IsInt()
   @IsPositive()
-  github_id?: number;
+  following?: number;
+
+  @IsOptional()
+  @IsInt()
+  @IsPositive()
+  followers?: number;
+
+  @IsOptional()
+  @IsString()
+  login?: string;
 
   @IsOptional()
   @IsUrl()

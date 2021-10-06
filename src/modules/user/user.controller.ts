@@ -56,6 +56,13 @@ export class UserController {
     return this.userService.createNewUser(createUserDTO);
   }
 
+  @Post(':id/process-user')
+  processUserInfo(
+    @Param(ValidationPipe) getUserDTO: GetUserDTO,
+  ): Promise<void> {
+    return this.userService.processUser(getUserDTO.id);
+  }
+
   @Put(':id')
   updateUser(
     @Param(ValidationPipe) getUserDTO: GetUserDTO,
