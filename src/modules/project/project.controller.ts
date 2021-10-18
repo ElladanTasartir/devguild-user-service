@@ -29,6 +29,13 @@ export class ProjectController {
     return this.projectService.getMembersFromProject(getMembersDTO.id);
   }
 
+  @Get(':id/project-members')
+  getProjectsWhereUserIsAMember(
+    @Param(ValidationPipe) getMembersDTO: GetMembersDTO,
+  ): Promise<string[]> {
+    return this.projectService.getProjectsWhereUserIsAMember(getMembersDTO.id);
+  }
+
   @Post(':id/members')
   insertProjectMember(
     @Param(ValidationPipe)

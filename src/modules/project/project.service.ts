@@ -66,6 +66,16 @@ export class ProjectService {
     await this.projectRepository.save(projectMember);
   }
 
+  async getProjectsWhereUserIsAMember(id: string): Promise<string[]> {
+    const projects = await this.projectRepository.find({
+      where: {
+        user_id: id,
+      },
+    });
+
+    return projects.map((project) => project.project_id);
+  }
+
   async insertComment(
     id: string,
     insertCommentDTO: InsertCommentDTO,
