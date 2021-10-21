@@ -84,7 +84,7 @@ export class ProjectService {
 
     await this.getProjectById(id);
 
-    await this.userService.getUser(user_id, false);
+    const user = await this.userService.getUser(user_id, false);
 
     const createdComment = this.commentsRepository.create({
       comment,
@@ -92,7 +92,9 @@ export class ProjectService {
       project_id: id,
     });
 
-    return this.commentsRepository.save(createdComment);
+    const newComment = await this.commentsRepository.save(createdComment);
+
+    return this.mapUserToSingleComment(newComment, user);
   }
 
   async getCommentsFromProject(id: string): Promise<CommentsWithUsers[]> {
@@ -119,6 +121,19 @@ export class ProjectService {
     } catch (err) {
       throw new NotFoundException(`Project with ID "${id}" was not found`);
     }
+  }
+
+  private mapUserToSingleComment(
+    comment: UserComments,
+    user: User,
+  ): CommentsWithUsers {
+    return {
+      ...comment,
+      user_comment: {
+        username: user.username,
+        avatar_url: user.avatar_url,
+      },
+    };
   }
 
   private mapUsersToComments(
