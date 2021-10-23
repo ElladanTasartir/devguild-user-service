@@ -31,7 +31,7 @@ export const techServiceURL = `http://${process.env.DEVGUILD_TECH_SERVICE_URL}`;
 export const port = Number(process.env.PORT) || 7000;
 
 export const rabbitmq = {
-  connectionString: `${process.env.RABBITMQ_HOST}`,
+  connectionString: process.env.RABBITMQ_HOST,
   technologiesProcessorQueue: process.env.TECHNOLOGIES_PROCESSOR_QUEUE,
 };
 
