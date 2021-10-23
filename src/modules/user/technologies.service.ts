@@ -48,7 +48,23 @@ export class TechnologiesService {
       id,
     );
 
-    if (userAlreadyHasTechnologies.length) {
+    const uniqueTechnologies = [
+      ...new Set(
+        technologies
+          .map((tech) => {
+            const foundTechnology = userAlreadyHasTechnologies.find(
+              (userTech) => tech.technology_id === userTech.technology_id,
+            );
+
+            if (!foundTechnology) {
+              return tech.technology_id;
+            }
+          })
+          .filter(Boolean),
+      ),
+    ];
+
+    if (!uniqueTechnologies.length) {
       throw new BadRequestException(
         `User already has technologies "${userAlreadyHasTechnologies
           .map((tech) => tech.technology_id)
@@ -56,8 +72,8 @@ export class TechnologiesService {
       );
     }
 
-    const mapTechnologiesToUser = technologies.map((tech) => ({
-      ...tech,
+    const mapTechnologiesToUser = uniqueTechnologies.map((tech) => ({
+      technology_id: tech,
       user_id: id,
     }));
 
