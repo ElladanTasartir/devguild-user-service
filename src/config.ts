@@ -24,9 +24,9 @@ REQUIRED_ENV_VARS.forEach((envVar) => {
   }
 });
 
-export const projectServiceURL = `http://${process.env.DEVGUILD_PROJECT_SERVICE_URL}`;
+export const projectServiceURL = process.env.DEVGUILD_PROJECT_SERVICE_URL;
 
-export const techServiceURL = `http://${process.env.DEVGUILD_TECH_SERVICE_URL}`;
+export const techServiceURL = process.env.DEVGUILD_TECH_SERVICE_URL;
 
 export const port = Number(process.env.PORT) || 7000;
 
