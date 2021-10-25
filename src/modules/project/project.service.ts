@@ -101,7 +101,12 @@ export class ProjectService {
     await this.getProjectById(id);
 
     const commentsFromProject = await this.commentsRepository.find({
-      project_id: id,
+      where: {
+        project_id: id,
+      },
+      order: {
+        created_at: 'ASC',
+      },
     });
 
     const usersIds = [
