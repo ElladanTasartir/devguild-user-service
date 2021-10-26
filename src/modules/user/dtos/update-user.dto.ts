@@ -1,10 +1,4 @@
-import {
-  IsInt,
-  IsOptional,
-  IsPositive,
-  IsString,
-  IsUrl,
-} from 'class-validator';
+import { IsInt, IsOptional, IsString, IsUrl } from 'class-validator';
 
 export class UpdateUserDTO {
   @IsOptional()
@@ -17,12 +11,10 @@ export class UpdateUserDTO {
 
   @IsOptional()
   @IsInt()
-  @IsPositive()
   following?: number;
 
   @IsOptional()
   @IsInt()
-  @IsPositive()
   followers?: number;
 
   @IsOptional()
